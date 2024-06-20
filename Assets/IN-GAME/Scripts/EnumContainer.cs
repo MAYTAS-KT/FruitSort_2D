@@ -1,5 +1,3 @@
-using System;
-
 namespace FruitSort
 {
     public enum ColorBasketType

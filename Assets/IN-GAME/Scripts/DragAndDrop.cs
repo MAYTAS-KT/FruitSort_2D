@@ -1,7 +1,5 @@
 using TMPro;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static FruitSort.GameData;
