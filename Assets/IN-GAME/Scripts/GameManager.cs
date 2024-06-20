@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static FruitSort.GameData;
@@ -13,21 +15,14 @@ namespace FruitSort
         [Header("Checks")]
         [SerializeField] bool randomizeSortingCriteria;
         [Header("Sorting Type")]
-        public SortingCriteria sortingCriteria=SortingCriteria.Color;
+        [SerializeField] SortingCriteria sortingCriteria=SortingCriteria.Color;
        
         [SerializeField] GameTimer gameTimer;
         [SerializeField] GameData gameData;
         [SerializeField] LayoutGroup animalLayoutGroup;
         [SerializeField] Transform habitatGroupLayout;
-        [SerializeField] Image visualImageRef;
-
-        [Header("COLOR REF")]
-        [SerializeField] Color originalColor;
-        [SerializeField] Color correctGuessColor;
-        [SerializeField] Color WrongGuessColor;
 
         public static GameManager instance;
-
         private AudioManager audioManager;
 
         private List<FruitData> shuffledFruits;
@@ -53,12 +48,15 @@ namespace FruitSort
             {
                 audioManager = AudioManager.instance;
             }
-            originalColor=visualImageRef.color;
-
-
+          
             shuffledFruits = new List<FruitData>(gameData.Fruits);
             shuffledBaskets = new List<BasketData>(gameData.Baskets);
 
+        }
+
+        public SortingCriteria GetSortingCriteria()
+        {
+            return sortingCriteria;
         }
 
         public void LoadGame()
@@ -80,8 +78,6 @@ namespace FruitSort
 
         public void SpawnFruits()
         {
-            DragAndDrop temp;
-
             if (animalLayoutGroup.transform.childCount >0)//USED FOR RESETTING 
             {
                 foreach (Transform child in animalLayoutGroup.transform)
@@ -98,22 +94,14 @@ namespace FruitSort
                 }
                 // Instantiate the animal prefab and get its DragAndDrop component
                 GameObject newFruit = Instantiate(gameData.fruitPrefab, animalLayoutGroup.transform);
-                temp = newFruit.GetComponent<DragAndDrop>();
+                newFruit.GetComponent<DragAndDrop>().SetUpPrefab(fruitData);
 
-                // Assign properties to the DragAndDrop component
-                temp.fruitText.text = fruitData.fruitName;
-                temp.fruitType = fruitData.fruitType;
-                temp.fruitColor = fruitData.fruitColor;
-                temp.fruitSize = fruitData.fruitSize;
-                temp.fruitImage.sprite = fruitData.fruitSprite;
             }
             
         }
 
         public void SpawnBaskets()
         {
-            Basket temp;
-
             if (habitatGroupLayout.childCount > 0)//USED FOR RESETTING 
             {
                 foreach (Transform child in habitatGroupLayout)
@@ -129,81 +117,10 @@ namespace FruitSort
                     continue;
                 }
 
-                // Instantiate the animal prefab and get its DragAndDrop component
+                // Instantiate the animal prefab and get its Basket component
                 GameObject newBasket = Instantiate(gameData.basketPrefab, habitatGroupLayout);
-                temp = newBasket.GetComponent<Basket>();
-
-                // Assign properties to the DragAndDrop component
-                temp.basketColor = basketData.colorBasketType;
-                temp.fruitBasketType= basketData.fruitBasketTypes;
-                temp.basketSize = basketData.basketSize;
-                temp.BasketImage.sprite = basketData.basketSprite;
-
-                switch (sortingCriteria)
-                {
-                    case SortingCriteria.Size:
-                        temp.BasketName.text =basketData.basketSize.ToString();
-                        break;
-                    case SortingCriteria.Color:
-                        temp.BasketName.text =basketData.colorBasketType.ToString();
-                        temp.BasketImage.color = basketData.basketColor;
-                        break;
-                    case SortingCriteria.Type:
-                        temp.BasketName.text =basketData.fruitBasketTypes.ToString();
-                        break;
-                    default:
-                        temp.BasketName.text = basketData.basketName;
-                        break;
-                }
+                newBasket.GetComponent<Basket>().SetupBasket(basketData);
             }
-        }
-
-        public void CheckGuess(DragAndDrop fruit, Basket basket)
-        {
-            bool isCorrect = false;
-
-            switch (sortingCriteria)
-            {
-                case SortingCriteria.Size:
-                    isCorrect = fruit.fruitSize == basket.basketSize;
-                    break;
-                case SortingCriteria.Color:
-                    isCorrect = fruit.fruitColor == basket.basketColor;
-                    break;
-                case SortingCriteria.Type:
-                    isCorrect = fruit.fruitType==basket.fruitBasketType;
-                    break;
-            }
-
-            if (isCorrect)
-            {
-                CorrectGuess();
-            }
-            else
-            {
-                WrongGuess();
-            }
-
-            /*if (animalLayoutGroup.transform.childCount == 0)
-            {
-                AllAnimalSorted();
-            }*/
-
-        }
-
-        public void CorrectGuess()
-        {
-            Debug.Log("Correct Guess");
-            audioManager.PlayCorrectGuessSound();
-            ShowCorrectVisual();
-
-        }
-
-        public void WrongGuess()
-        {
-            Debug.Log("Wrong Guess");
-            audioManager.PlayWrongGuessSound();
-            ShowWrongVisual();
         }
 
         public void AllFruitsSorted()
@@ -232,23 +149,6 @@ namespace FruitSort
             }
         }
 
-        #endregion
-
-        #region Visual
-        public void ShowCorrectVisual()
-        {
-            visualImageRef.color=correctGuessColor;
-            Invoke(nameof(setoriginalColor), 0.5f);
-        }
-        public void ShowWrongVisual()
-        {
-            visualImageRef.color = WrongGuessColor;
-            Invoke(nameof(setoriginalColor), 0.5f);
-        }
-        private void setoriginalColor()
-        {
-           visualImageRef.color=originalColor;
-        }
         #endregion
 
     }

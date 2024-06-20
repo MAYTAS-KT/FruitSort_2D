@@ -1,6 +1,8 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 using static FruitSort.GameData;
 
@@ -12,8 +14,8 @@ namespace FruitSort
         public ColorBasketType fruitColor;
         public FruitBasketType fruitType;
         public Size fruitSize;
-        public Image fruitImage;
-        public TextMeshProUGUI fruitText;
+        [SerializeField] Image fruitImage;
+        [SerializeField] TextMeshProUGUI fruitText;
 
         private int startChildIndex;
         private Transform parentToReturnTo = null;
@@ -24,12 +26,13 @@ namespace FruitSort
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void SetUpPrefab(FruitData animalData)
+        public void SetUpPrefab(FruitData fruitData)
         {
-            fruitColor = animalData.fruitColor;
-            fruitType = animalData.fruitType;
-            fruitImage.sprite = animalData.fruitSprite;
-            fruitText.text=animalData.fruitName;
+            fruitText.text = fruitData.fruitName;
+            fruitType = fruitData.fruitType;
+            fruitColor = fruitData.fruitColor;
+            fruitSize = fruitData.fruitSize;
+            fruitImage.sprite = fruitData.fruitSprite;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -57,12 +60,38 @@ namespace FruitSort
         public void OnEndDrag(PointerEventData eventData)
         {
             canvasGroup.alpha = 1f;
-            if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.TryGetComponent(out Basket habitat))
+            if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.TryGetComponent(out Basket basket))
             {
 
                 // Notify the GameManager about the drop and pass the data needed for the check
-                GameManager.instance.CheckGuess(this, habitat.GetComponent<Basket>());
-                Destroy(gameObject);
+                bool isCorrect = false;
+
+                switch (GameManager.instance.GetSortingCriteria())
+                {
+                    case SortingCriteria.Size:
+                        isCorrect = fruitSize == basket.basketSize;
+                        break;
+                    case SortingCriteria.Color:
+                        isCorrect = fruitColor == basket.basketColor;
+                        break;
+                    case SortingCriteria.Type:
+                        isCorrect = fruitType == basket.fruitBasketType;
+                        break;
+                }
+
+                if (isCorrect)
+                {
+                    AudioManager.instance.PlayCorrectGuessSound();
+                    PerformScaleIntoImageAnimation();
+                    basket.PerformCorrectAnimation();
+                }
+                else
+                {
+                    AudioManager.instance.PlayWrongGuessSound();
+                    PerformScaleOutImageAnimation();
+                    basket.PerformVibrationAnimation();
+                }
+
             }
             else//Return back to original pos
             {
@@ -85,5 +114,22 @@ namespace FruitSort
             }
         }
 
+        #region Dotween Functions
+
+        private void PerformScaleIntoImageAnimation()//Correct
+        {
+            transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutQuad).OnComplete(() =>
+            Destroy(gameObject)
+            );
+        }
+
+        private void PerformScaleOutImageAnimation()//Wrong
+        {
+            fruitImage.DOFade(0, 0.25f);
+            transform.DOScale(1.25f, 0.25f).OnComplete(() => Destroy(gameObject));
+
+        }
+
+        #endregion 
     }
 }

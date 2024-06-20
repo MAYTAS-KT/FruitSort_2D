@@ -177,7 +177,7 @@ namespace FruitSort
         {
             if (GameManager.instance != null)
             {
-                sortingInstructionText.text = "sort by - " + GameManager.instance.sortingCriteria.ToString();
+                sortingInstructionText.text = "sort by - " + GameManager.instance.GetSortingCriteria().ToString();
             }
             else
             {
