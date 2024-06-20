@@ -508,8 +508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a713a8b0e82d6e44916c2f510df2730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randomizeSortingCriteria: 0
-  sortingCriteria: 1
+  randomizeSortingCriteria: 1
+  sortingCriteria: 0
   gameTimer: {fileID: 1577410155}
   gameData: {fileID: 11400000, guid: 3b0d6f8a1fa9c1346aba8d6d590081c4, type: 2}
   animalLayoutGroup: {fileID: 944180367}

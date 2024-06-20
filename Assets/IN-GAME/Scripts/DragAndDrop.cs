@@ -80,6 +80,11 @@ namespace FruitSort
             }
 
             GameManager.instance.AnimalLayoutGroup(true);//Arrange Animal Layout group
+
+            if (parentToReturnTo.transform.childCount == 0)
+            {
+                GameManager.instance.AllFruitsSorted();
+            }
         }
 
     }

@@ -93,6 +93,10 @@ namespace FruitSort
 
             foreach (var fruitData in shuffledFruits)
             {
+                if (sortingCriteria==SortingCriteria.Type && fruitData.fruitType==FruitBasketType.Other)
+                {
+                    continue;
+                }
                 // Instantiate the animal prefab and get its DragAndDrop component
                 GameObject newFruit = Instantiate(gameData.fruitPrefab, animalLayoutGroup.transform);
                 temp = newFruit.GetComponent<DragAndDrop>();
@@ -181,10 +185,10 @@ namespace FruitSort
                 WrongGuess();
             }
 
-            if (animalLayoutGroup.transform.childCount == 0)
+            /*if (animalLayoutGroup.transform.childCount == 0)
             {
                 AllAnimalSorted();
-            }
+            }*/
 
         }
 
@@ -203,7 +207,7 @@ namespace FruitSort
             ShowWrongVisual();
         }
 
-        public void AllAnimalSorted()
+        public void AllFruitsSorted()
         {
             Debug.Log("ALL ANIMAL SORTED");
             gameTimer.StopTimer();
