@@ -49,26 +49,24 @@ namespace FruitSort
 
         public void StopTimer()
         {
-           
+
+
             if (timerRef != null)
             {
                 StopCoroutine(timerRef);
             }
 
-            if (PlayerPrefs.GetFloat(BestTimePrefKey, 0)==0)
+            if (PlayerPrefs.GetFloat(BestTimePrefKey, 0) == 0)
             {
                 PlayerPrefs.SetFloat(BestTimePrefKey, playerTime);
-                PlayerPrefs.Save();
-                return;
             }
-
-            if (playerTime < PlayerPrefs.GetFloat(BestTimePrefKey, 0))
+            else if (playerTime < PlayerPrefs.GetFloat(BestTimePrefKey, 0))
             {
                 PlayerPrefs.SetFloat(BestTimePrefKey, playerTime);
-                PlayerPrefs.Save();
-                print("TIME UPDATED");
+                //print("TIME UPDATED");
             }
 
+            PlayerPrefs.Save();
             onTimeStop.Invoke(playerTime);
         }
 
