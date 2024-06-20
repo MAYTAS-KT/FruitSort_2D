@@ -1,31 +1,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace safariSort
+namespace FruitSort
 {
     [CreateAssetMenu(fileName = "NewGameData", menuName = "GameData")]
     public class GameData : ScriptableObject
     {
         [System.Serializable]
-        public class HabitatData
+        public class BasketData
         {
-            public string habitatName;
-            public HabitatType habitatType;
-            public Sprite habitatSprite; 
+            public string basketName;
+            public ColorBasketType colorBasketType;
+            public FruitBasketType fruitBasketTypes;
+            public Size basketSize;
+            public Sprite basketSprite; 
         }
 
         [System.Serializable]
         public class AnimalData
         {
-            public string animalName;
-            public Sprite animalSprite;
-            public HabitatType[] possibleHabitat;
+            public string fruitName;
+            public Sprite fruitSprite;
+            public ColorBasketType fruitColor;
+            public FruitBasketType fruitType;
+            public Size fruitSize;
         }
 
-        public GameObject habitatPrefab;
-        public GameObject animalPrefab;
-        public List<HabitatData> habitats;
-        public List<AnimalData> animals;
+        public GameObject basketPrefab;
+        public GameObject fruitPrefab;
+        public List<BasketData> Baskets;
+        public List<AnimalData> Fruits;
 
     }
 }

@@ -2,13 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static safariSort.GameData;
+using static FruitSort.GameData;
 
 
-namespace safariSort
+namespace FruitSort
 {
     public class GameManager : MonoBehaviour
     {
+
+        [Header("CHECKS")]
+        [SerializeField] bool doColorCheck;
+        [SerializeField] bool doTypeCheck;
+        [SerializeField] bool doSizeCheck;
 
         [SerializeField] GameTimer gameTimer;
         [SerializeField] GameData gameData;
@@ -26,8 +31,8 @@ namespace safariSort
         private AudioManager audioManager;
         private UIManager uiManager;
 
-        private List<AnimalData> shuffledAnimals;
-        private List<HabitatData> shuffledHabitats;
+        private List<AnimalData> shuffledFruits;
+        private List<BasketData> shuffledBaskets;
 
         
 
@@ -50,15 +55,18 @@ namespace safariSort
                 audioManager = AudioManager.instance;
             }
             originalColor=visualImageRef.color;
-            shuffledAnimals = new List<AnimalData>(gameData.animals);
-            shuffledHabitats = new List<HabitatData>(gameData.habitats);
+
+            int randomInt = UnityEngine.Random.Range(0, 3);
+
+            shuffledFruits = new List<AnimalData>(gameData.Fruits);
+            shuffledBaskets = new List<BasketData>(gameData.Baskets);
 
         }
 
         public void LoadGame()
         {
-            ShuffleList(shuffledAnimals);
-            ShuffleList(shuffledHabitats);
+            ShuffleList(shuffledFruits);
+            ShuffleList(shuffledBaskets);
 
             SpawnAnimals();
             SpawnHabitats();
@@ -79,16 +87,17 @@ namespace safariSort
                 }
             }
 
-            foreach (var animalData in shuffledAnimals)
+            foreach (var fruitData in shuffledFruits)
             {
                 // Instantiate the animal prefab and get its DragAndDrop component
-                GameObject newAnimal = Instantiate(gameData.animalPrefab, animalLayoutGroup.transform);
-                temp = newAnimal.GetComponent<DragAndDrop>();
+                GameObject newFruit = Instantiate(gameData.fruitPrefab, animalLayoutGroup.transform);
+                temp = newFruit.GetComponent<DragAndDrop>();
 
                 // Assign properties to the DragAndDrop component
-                temp.animalText.text = animalData.animalName;
-                temp.possibleHabitat = animalData.possibleHabitat;
-                temp.animalImage.sprite = animalData.animalSprite;
+                temp.fruitText.text = fruitData.fruitName;
+                temp.fruitType = fruitData.fruitType;
+                temp.fruitColor = fruitData.fruitColor;
+                temp.fruitImage.sprite = fruitData.fruitSprite;
             }
             
         }
@@ -105,16 +114,17 @@ namespace safariSort
                 }
             }
 
-            foreach (var habitatData in shuffledHabitats)
+            foreach (var basketData in shuffledBaskets)
             {
                 // Instantiate the animal prefab and get its DragAndDrop component
-                GameObject newAnimal = Instantiate(gameData.habitatPrefab, habitatGroupLayout);
-                temp = newAnimal.GetComponent<Habitat>();
+                GameObject newBasket = Instantiate(gameData.basketPrefab, habitatGroupLayout);
+                temp = newBasket.GetComponent<Habitat>();
 
                 // Assign properties to the DragAndDrop component
-                temp.HabitatName.text = habitatData.habitatName;
-                temp.habitatType = habitatData.habitatType;
-                temp.habitatImage.sprite = habitatData.habitatSprite;
+                temp.BasketName.text = basketData.basketName;
+                temp.basketColor = basketData.colorBasketType;
+                temp.fruitBasketType= basketData.fruitBasketTypes;
+                temp.BasketImage.sprite = basketData.basketSprite;
             }
         }
 

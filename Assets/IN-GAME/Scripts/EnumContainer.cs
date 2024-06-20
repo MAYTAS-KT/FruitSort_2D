@@ -1,12 +1,29 @@
 using System;
 
-namespace safariSort
+namespace FruitSort
 {
-    public enum HabitatType
+    public enum ColorBasketType
     {
-        Jungle,
-        Ocean,
-        Farm,
-        Desert
+        Red,
+        Yellow,
+        Green,
+        Brown
     }
+
+    public enum FruitBasketType
+    {
+        Apple,
+        Watermelon,
+        Banana,
+        Coconut,
+        Other
+    }
+    public enum Size
+    {
+        large,
+        Medium,
+        Small,
+        None
+    }
+
 }

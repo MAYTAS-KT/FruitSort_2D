@@ -4,7 +4,7 @@ using TMPro;
 using System.Collections;
 using Unity.VisualScripting;
 
-namespace safariSort
+namespace FruitSort
 {
     public class GameTimer : MonoBehaviour
     {

@@ -3,16 +3,24 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static safariSort.GameData;
+using static FruitSort.GameData;
 
-namespace safariSort
+namespace FruitSort
 {
     public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [Header("Animal Data")]
-        public HabitatType[] possibleHabitat;
-        public Image animalImage;
-        public TextMeshProUGUI animalText;
+
+        [Header("CHECKS")]
+        public bool doColorCheck;
+        public bool doTypeCheck;
+        public bool doSizeCheck;
+
+        [Header("FRUIT Data")]
+        public ColorBasketType fruitColor;
+        public FruitBasketType fruitType;
+        public Size fruitSize;
+        public Image fruitImage;
+        public TextMeshProUGUI fruitText;
 
         private int startChildIndex;
         private Transform parentToReturnTo = null;
@@ -25,9 +33,10 @@ namespace safariSort
 
         public void SetUpPrefab(AnimalData animalData)
         {
-            possibleHabitat = animalData.possibleHabitat;
-            animalImage.sprite = animalData.animalSprite;
-            animalText.text=animalData.animalName;
+            fruitColor = animalData.fruitColor;
+            fruitType = animalData.fruitType;
+            fruitImage.sprite = animalData.fruitSprite;
+            fruitText.text=animalData.fruitName;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -37,7 +46,7 @@ namespace safariSort
                 AudioManager.instance.PlayClicKSound();
             }
             GameManager.instance.AnimalLayoutGroup(false);//Stop Arranging Animal Layout group
-            animalText.enabled=false;
+            fruitText.enabled=false;
             transform.localScale *= 1.25f;
             startChildIndex = transform.GetSiblingIndex();
             parentToReturnTo = transform.parent;
@@ -52,32 +61,43 @@ namespace safariSort
             canvasGroup.blocksRaycasts = false;
         }
 
-        [System.Obsolete]
         public void OnEndDrag(PointerEventData eventData)
         {
             canvasGroup.alpha = 1f;
             if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.TryGetComponent(out Habitat habitat))
             {
                
-                Debug.Log("Enetred");
-
-                for (int i = 0; i < possibleHabitat.Length; i++)
+                if (doColorCheck)//CHECKING COLOR
                 {
-                    HabitatType item = possibleHabitat[i];
-                    if (habitat.habitatType == item)
+                    if (habitat.basketColor==fruitColor)
                     {
-
                         GameManager.instance.CorrectGuess();//selected correct habitat
                         Destroy(gameObject);
                     }
-                    else if(i==possibleHabitat.Length-1)
+                }
+                else if(doTypeCheck)//CHECKING TYPE
+                {
+                    if (habitat.fruitBasketType == fruitType)
                     {
-                        GameManager.instance.WrongGuess();//selected wrong habitat
+                        GameManager.instance.CorrectGuess();//selected correct habitat
                         Destroy(gameObject);
                     }
                 }
+                else if(doSizeCheck)//CHECKING Size
+                {
+                    if (habitat.basketSize == fruitSize)
+                    {
+                        GameManager.instance.CorrectGuess();//selected correct habitat
+                        Destroy(gameObject);
+                    }
+                }
+                else
+                {
+                    GameManager.instance.WrongGuess();//selected wrong habitat
+                    Destroy(gameObject);
+                }
 
-                if (parentToReturnTo.transform.GetChildCount()==0)
+                if (parentToReturnTo.transform.childCount==0)
                 {
                     GameManager.instance.AllAnimalSorted();
                 }
@@ -88,7 +108,7 @@ namespace safariSort
                 {
                     AudioManager.instance.PlayErrorSound();
                 }
-                animalText.enabled = true;
+                fruitText.enabled = true;
                 canvasGroup.blocksRaycasts = true;
                 transform.SetParent(parentToReturnTo, false);
                 transform.SetSiblingIndex(startChildIndex);

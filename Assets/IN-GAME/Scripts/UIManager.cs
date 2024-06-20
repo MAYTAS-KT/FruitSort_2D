@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace safariSort
+namespace FruitSort
 {
 
     public class UIManager : MonoBehaviour
