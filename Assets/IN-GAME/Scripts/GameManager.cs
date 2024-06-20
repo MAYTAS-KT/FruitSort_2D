@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 using static FruitSort.GameData;
 
@@ -9,7 +10,8 @@ namespace FruitSort
 {
     public class GameManager : MonoBehaviour
     {
-
+        [Header("Sorting Type")]
+        [SerializeField] SortingCriteria sortingCriteria;
         [Header("CHECKS")]
         [SerializeField] bool doColorCheck;
         [SerializeField] bool doTypeCheck;
@@ -31,7 +33,7 @@ namespace FruitSort
         private AudioManager audioManager;
         private UIManager uiManager;
 
-        private List<AnimalData> shuffledFruits;
+        private List<FruitData> shuffledFruits;
         private List<BasketData> shuffledBaskets;
 
         
@@ -56,9 +58,9 @@ namespace FruitSort
             }
             originalColor=visualImageRef.color;
 
-            int randomInt = UnityEngine.Random.Range(0, 3);
+            sortingCriteria = (SortingCriteria)UnityEngine.Random.Range(0, Enum.GetValues(typeof(SortingCriteria)).Length);
 
-            shuffledFruits = new List<AnimalData>(gameData.Fruits);
+            shuffledFruits = new List<FruitData>(gameData.Fruits);
             shuffledBaskets = new List<BasketData>(gameData.Baskets);
 
         }
@@ -104,7 +106,7 @@ namespace FruitSort
 
         public void SpawnHabitats()
         {
-            Habitat temp;
+            Basket temp;
 
             if (habitatGroupLayout.childCount > 0)//USED FOR RESETTING 
             {
@@ -116,16 +118,69 @@ namespace FruitSort
 
             foreach (var basketData in shuffledBaskets)
             {
+                if (sortingCriteria==SortingCriteria.Size && basketData.basketSize==Size.None)
+                {
+                    continue;
+                }
+
                 // Instantiate the animal prefab and get its DragAndDrop component
                 GameObject newBasket = Instantiate(gameData.basketPrefab, habitatGroupLayout);
-                temp = newBasket.GetComponent<Habitat>();
+                temp = newBasket.GetComponent<Basket>();
 
                 // Assign properties to the DragAndDrop component
-                temp.BasketName.text = basketData.basketName;
                 temp.basketColor = basketData.colorBasketType;
                 temp.fruitBasketType= basketData.fruitBasketTypes;
                 temp.BasketImage.sprite = basketData.basketSprite;
+
+                switch (sortingCriteria)
+                {
+                    case SortingCriteria.Size:
+                        temp.BasketName.text =basketData.basketSize + " " + basketData.basketName;
+                        break;
+                    case SortingCriteria.Color:
+                        temp.BasketName.text =basketData.colorBasketType + " " + basketData.basketName;
+                        break;
+                    case SortingCriteria.Type:
+                        temp.BasketName.text =basketData.fruitBasketTypes+" "+ basketData.basketName;
+                        break;
+                    default:
+                        temp.BasketName.text = basketData.basketName;
+                        break;
+                }
             }
+        }
+
+        public void CheckGuess(DragAndDrop fruit, Basket basket)
+        {
+            bool isCorrect = false;
+
+            switch (sortingCriteria)
+            {
+                case SortingCriteria.Size:
+                    isCorrect = fruit.fruitSize == basket.basketSize;
+                    break;
+                case SortingCriteria.Color:
+                    isCorrect = fruit.fruitColor == basket.basketColor;
+                    break;
+                case SortingCriteria.Type:
+                    isCorrect = fruit.fruitType==basket.fruitBasketType;
+                    break;
+            }
+
+            if (isCorrect)
+            {
+                CorrectGuess();
+            }
+            else
+            {
+                WrongGuess();
+            }
+
+            if (animalLayoutGroup.transform.childCount == 0)
+            {
+                AllAnimalSorted();
+            }
+
         }
 
         public void CorrectGuess()

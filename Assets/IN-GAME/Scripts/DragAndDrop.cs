@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -9,12 +10,6 @@ namespace FruitSort
 {
     public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-
-        [Header("CHECKS")]
-        public bool doColorCheck;
-        public bool doTypeCheck;
-        public bool doSizeCheck;
-
         [Header("FRUIT Data")]
         public ColorBasketType fruitColor;
         public FruitBasketType fruitType;
@@ -31,7 +26,7 @@ namespace FruitSort
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void SetUpPrefab(AnimalData animalData)
+        public void SetUpPrefab(FruitData animalData)
         {
             fruitColor = animalData.fruitColor;
             fruitType = animalData.fruitType;
@@ -64,43 +59,12 @@ namespace FruitSort
         public void OnEndDrag(PointerEventData eventData)
         {
             canvasGroup.alpha = 1f;
-            if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.TryGetComponent(out Habitat habitat))
+            if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.TryGetComponent(out Basket habitat))
             {
-               
-                if (doColorCheck)//CHECKING COLOR
-                {
-                    if (habitat.basketColor==fruitColor)
-                    {
-                        GameManager.instance.CorrectGuess();//selected correct habitat
-                        Destroy(gameObject);
-                    }
-                }
-                else if(doTypeCheck)//CHECKING TYPE
-                {
-                    if (habitat.fruitBasketType == fruitType)
-                    {
-                        GameManager.instance.CorrectGuess();//selected correct habitat
-                        Destroy(gameObject);
-                    }
-                }
-                else if(doSizeCheck)//CHECKING Size
-                {
-                    if (habitat.basketSize == fruitSize)
-                    {
-                        GameManager.instance.CorrectGuess();//selected correct habitat
-                        Destroy(gameObject);
-                    }
-                }
-                else
-                {
-                    GameManager.instance.WrongGuess();//selected wrong habitat
-                    Destroy(gameObject);
-                }
 
-                if (parentToReturnTo.transform.childCount==0)
-                {
-                    GameManager.instance.AllAnimalSorted();
-                }
+                // Notify the GameManager about the drop and pass the data needed for the check
+                GameManager.instance.CheckGuess(this, habitat.GetComponent<Basket>());
+                Destroy(gameObject);
             }
             else//Return back to original pos
             {

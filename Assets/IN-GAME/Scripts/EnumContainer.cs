@@ -24,6 +24,14 @@ namespace FruitSort
         Medium,
         Small,
         None
+
+    }
+
+    public enum SortingCriteria 
+    {
+        Size,
+        Color,
+        Type
     }
 
 }

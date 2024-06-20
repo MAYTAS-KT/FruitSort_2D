@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace FruitSort
 {
-    public class Habitat : MonoBehaviour
+    public class Basket : MonoBehaviour
     {
         public ColorBasketType basketColor;
         public FruitBasketType fruitBasketType;

@@ -21,17 +21,17 @@ MonoBehaviour:
     basketSize: 0
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}
   - basketName: Basket
-    colorBasketType: 0
+    colorBasketType: 1
     fruitBasketTypes: 2
     basketSize: 1
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}
   - basketName: Basket
-    colorBasketType: 0
+    colorBasketType: 2
     fruitBasketTypes: 1
     basketSize: 2
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}
   - basketName: Basket
-    colorBasketType: 0
+    colorBasketType: 3
     fruitBasketTypes: 3
     basketSize: 3
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}

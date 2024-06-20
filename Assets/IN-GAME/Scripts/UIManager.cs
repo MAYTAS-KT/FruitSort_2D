@@ -70,6 +70,7 @@ namespace FruitSort
 
         public void ShowWinPopUP(float playerTime)
         {
+            print("entered");
             int minutes = Mathf.FloorToInt(playerTime / 60);
             int seconds = Mathf.FloorToInt(playerTime % 60);
             YourTimeText_GameOver.text = string.Format("Your Time - {0:00}:{1:00}", minutes, seconds);

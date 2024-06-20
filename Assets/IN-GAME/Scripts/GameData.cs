@@ -17,7 +17,7 @@ namespace FruitSort
         }
 
         [System.Serializable]
-        public class AnimalData
+        public class FruitData
         {
             public string fruitName;
             public Sprite fruitSprite;
@@ -29,7 +29,7 @@ namespace FruitSort
         public GameObject basketPrefab;
         public GameObject fruitPrefab;
         public List<BasketData> Baskets;
-        public List<AnimalData> Fruits;
+        public List<FruitData> Fruits;
 
     }
 }
