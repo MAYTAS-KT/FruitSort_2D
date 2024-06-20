@@ -37,10 +37,8 @@ namespace FruitSort
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (AudioManager.instance != null)
-            {
-                AudioManager.instance.PlayClicKSound();
-            }
+          
+            AudioManager.instance?.PlayClicKSound();
             GameManager.instance.AnimalLayoutGroup(false);//Stop Arranging Animal Layout group
             fruitText.enabled=false;
             transform.localScale *= 1.25f;
@@ -63,7 +61,6 @@ namespace FruitSort
             if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.TryGetComponent(out Basket basket))
             {
 
-                // Notify the GameManager about the drop and pass the data needed for the check
                 bool isCorrect = false;
 
                 switch (GameManager.instance.GetSortingCriteria())
@@ -110,6 +107,7 @@ namespace FruitSort
 
             if (parentToReturnTo.transform.childCount == 0)
             {
+                AudioManager.instance.PlayWinSound();
                 GameManager.instance.AllFruitsSorted();
             }
         }
@@ -119,7 +117,7 @@ namespace FruitSort
         private void PerformScaleIntoImageAnimation()//Correct
         {
             transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutQuad).OnComplete(() =>
-            Destroy(gameObject)
+                Destroy(gameObject)
             );
         }
 

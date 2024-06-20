@@ -2,14 +2,13 @@ using UnityEngine.Events;
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using Unity.VisualScripting;
 
 namespace FruitSort
 {
     public class GameTimer : MonoBehaviour
     {
         [Header("TEXT")]
-        public TextMeshProUGUI timerText;
+        [SerializeField] TextMeshProUGUI timerText;
 
         public UnityEvent<float> onTimeStop; // Event to trigger when time is up
         private IEnumerator timerRef;
@@ -49,8 +48,6 @@ namespace FruitSort
 
         public void StopTimer()
         {
-
-
             if (timerRef != null)
             {
                 StopCoroutine(timerRef);
@@ -63,11 +60,10 @@ namespace FruitSort
             else if (playerTime < PlayerPrefs.GetFloat(BestTimePrefKey, 0))
             {
                 PlayerPrefs.SetFloat(BestTimePrefKey, playerTime);
-                //print("TIME UPDATED");
             }
 
             PlayerPrefs.Save();
-            onTimeStop.Invoke(playerTime);
+            onTimeStop?.Invoke(playerTime);
         }
 
     }

@@ -1,7 +1,5 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static FruitSort.GameData;
@@ -23,8 +21,6 @@ namespace FruitSort
         [SerializeField] Transform habitatGroupLayout;
 
         public static GameManager instance;
-        private AudioManager audioManager;
-
         private List<FruitData> shuffledFruits;
         private List<BasketData> shuffledBaskets;
 
@@ -42,24 +38,21 @@ namespace FruitSort
                 Destroy(gameObject);
             }
         }
+
         private void Start()
         {
-            if (AudioManager.instance != null)
-            {
-                audioManager = AudioManager.instance;
-            }
-          
             shuffledFruits = new List<FruitData>(gameData.Fruits);
             shuffledBaskets = new List<BasketData>(gameData.Baskets);
+            UIManager.loadGame += OnLoadGame; 
 
         }
 
-        public SortingCriteria GetSortingCriteria()
+        public void OnDestroy()
         {
-            return sortingCriteria;
+            UIManager.loadGame -= OnLoadGame;
         }
 
-        public void LoadGame()
+        void OnLoadGame()
         {
             if (randomizeSortingCriteria)
             {
@@ -72,8 +65,12 @@ namespace FruitSort
             SpawnFruits();
             SpawnBaskets();
 
-
             gameTimer.ResetAndStartTimer();
+        }
+
+        public SortingCriteria GetSortingCriteria()
+        {
+            return sortingCriteria;
         }
 
         public void SpawnFruits()
@@ -92,10 +89,10 @@ namespace FruitSort
                 {
                     continue;
                 }
+
                 // Instantiate the animal prefab and get its DragAndDrop component
                 GameObject newFruit = Instantiate(gameData.fruitPrefab, animalLayoutGroup.transform);
                 newFruit.GetComponent<DragAndDrop>().SetUpPrefab(fruitData);
-
             }
             
         }
@@ -127,8 +124,6 @@ namespace FruitSort
         {
             Debug.Log("ALL ANIMAL SORTED");
             gameTimer.StopTimer();
-            audioManager.PlayWinSound();
-
         }
 
         public void AnimalLayoutGroup(bool isEnabled)

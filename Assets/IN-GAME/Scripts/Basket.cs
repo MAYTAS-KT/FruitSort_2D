@@ -12,9 +12,9 @@ namespace FruitSort
         public ColorBasketType basketColor;
         public FruitBasketType fruitBasketType;
         public Size basketSize;
-        public Image BasketImage;
-        public Image basketFrame;
-        public TextMeshProUGUI BasketName;
+        [SerializeField] Image BasketImage;
+        [SerializeField] Image basketFrame;
+        [SerializeField] TextMeshProUGUI BasketName;
 
 
         public void SetupBasket(BasketData basketData)

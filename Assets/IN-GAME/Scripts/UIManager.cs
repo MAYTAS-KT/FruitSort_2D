@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +39,8 @@ namespace FruitSort
         [SerializeField] TextMeshProUGUI YourTimeText_GameOver;
         [SerializeField] TextMeshProUGUI sortingInstructionText;
 
+        public static Action loadGame;
+
         [Header("SCRIPT REF")]
         [SerializeField] GameTimer gameTimer;
 
@@ -52,9 +55,10 @@ namespace FruitSort
                 SetAudioIcon();
             }
 
-            gameTimer.onTimeStop.AddListener(ShowWinPopUP);
             SetBestTime();
 
+            //SET UP BUTTON LISTNERS
+            gameTimer.onTimeStop.AddListener(ShowWinPopUP);
             playBtn.onClick.AddListener(Play);
             optionsBtn.onClick.AddListener(Options);
             quitBtn.onClick.AddListener(Quit);
@@ -68,44 +72,22 @@ namespace FruitSort
             audioBtn.onClick.AddListener(SetAudioIcon);
             restartBtn.onClick.AddListener(RestartGame);
             restartBtn_GameOver.onClick.AddListener(RestartGame);
-        }
-
-        
-        public void ShowWinPopUP(float playerTime)
-        {
-            print("entered");
-            int minutes = Mathf.FloorToInt(playerTime / 60);
-            int seconds = Mathf.FloorToInt(playerTime % 60);
-            YourTimeText_GameOver.text = string.Format("Your Time - {0:00}:{1:00}", minutes, seconds);
-            SetBestTime();
-            GameOverPOpUp.SetActive(true);
-            PausePanel.SetActive(false);
 
         }
+
+        #region BUTTON FUNCTIONS
 
         private void RestartGame()
         {
             Time.timeScale = 1;
             audioManager.PlayClicKSound();
-            GameManager.instance.LoadGame();
+            loadGame?.Invoke();
             GameOverPOpUp.SetActive(false);
             GamePanel.SetActive(true);
             mainMenu.SetActive(false);
             PausePanel.SetActive(false);
             GiveInstructionText();
 
-        }
-
-        private void SetAudioIcon()
-        {
-            if (audioManager.IsAudioEnabled())
-            {
-                audioIcon.sprite = audioOn;
-            }
-            else
-            {
-                audioIcon.sprite = audioOff;
-            }
         }
 
         private void Options()
@@ -123,16 +105,11 @@ namespace FruitSort
         {
             mainMenu.SetActive(false);
             GamePanel.SetActive(true);
-            GameManager.instance.LoadGame();
+            loadGame?.Invoke();
             GiveInstructionText();
             audioManager.PlayClicKSound();
             audioManager.ChangeToGameMusic();
 
-        }
-
-        private void Quit()
-        {
-            Application.Quit();
         }
 
         private void Setting()
@@ -164,14 +141,16 @@ namespace FruitSort
             audioManager.PlayClicKSound();
         }
 
-        private void SetBestTime()
+
+
+        private void Quit()
         {
-            float time = PlayerPrefs.GetFloat(gameTimer.BestTimePrefKey, 0);
-            int minutes = Mathf.FloorToInt(time / 60);
-            int seconds = Mathf.FloorToInt(time % 60);
-            BestTimeText.text = string.Format("Best Time - {0:00}:{1:00}", minutes, seconds);
-            BestTimeText_GameOver.text = string.Format("Best Time - {0:00}:{1:00}", minutes, seconds);
+            Application.Quit();
         }
+
+        #endregion
+
+        #region TEXT SETUP
 
         private void GiveInstructionText()
         {
@@ -182,6 +161,41 @@ namespace FruitSort
             else
             {
                 sortingInstructionText.text = "sort by - Color";
+            }
+        }
+        private void SetBestTime()
+        {
+            float time = PlayerPrefs.GetFloat(gameTimer.BestTimePrefKey, 0);
+            int minutes = Mathf.FloorToInt(time / 60);
+            int seconds = Mathf.FloorToInt(time % 60);
+            BestTimeText.text = string.Format("Best Time - {0:00}:{1:00}", minutes, seconds);
+            BestTimeText_GameOver.text = string.Format("Best Time - {0:00}:{1:00}", minutes, seconds);
+        }
+
+
+        #endregion
+
+        public void ShowWinPopUP(float playerTime)
+        {
+            print("entered");
+            int minutes = Mathf.FloorToInt(playerTime / 60);
+            int seconds = Mathf.FloorToInt(playerTime % 60);
+            YourTimeText_GameOver.text = string.Format("Your Time - {0:00}:{1:00}", minutes, seconds);
+            SetBestTime();
+            GameOverPOpUp.SetActive(true);
+            PausePanel.SetActive(false);
+
+        }
+
+        private void SetAudioIcon()
+        {
+            if (audioManager.IsAudioEnabled())
+            {
+                audioIcon.sprite = audioOn;
+            }
+            else
+            {
+                audioIcon.sprite = audioOff;
             }
         }
 

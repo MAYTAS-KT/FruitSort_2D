@@ -18,14 +18,14 @@ namespace FruitSort
     }
     public enum Size
     {
-        large,
+        Large,
         Medium,
         Small,
         None
 
     }
 
-    public enum SortingCriteria 
+    public enum SortingCriteria
     {
         Size,
         Color,

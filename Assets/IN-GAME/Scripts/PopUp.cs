@@ -17,7 +17,6 @@ namespace FruitSort
 
             target.localScale = Vector3.zero;
             target.DOScale(Vector3.one, Time).SetUpdate(true);
-
         }
 
     }
