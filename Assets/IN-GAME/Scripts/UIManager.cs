@@ -58,7 +58,7 @@ namespace FruitSort
             SetBestTime();
 
             //SET UP BUTTON LISTNERS
-            gameTimer.onTimeStop.AddListener(ShowWinPopUP);
+            gameTimer.onTimeStop.AddListener(ActiveWinPopUp);
             playBtn.onClick.AddListener(Play);
             optionsBtn.onClick.AddListener(Options);
             quitBtn.onClick.AddListener(Quit);
@@ -175,17 +175,7 @@ namespace FruitSort
 
         #endregion
 
-        public void ShowWinPopUP(float playerTime)
-        {
-            print("entered");
-            int minutes = Mathf.FloorToInt(playerTime / 60);
-            int seconds = Mathf.FloorToInt(playerTime % 60);
-            YourTimeText_GameOver.text = string.Format("Your Time - {0:00}:{1:00}", minutes, seconds);
-            SetBestTime();
-            GameOverPOpUp.SetActive(true);
-            PausePanel.SetActive(false);
-
-        }
+       
 
         private void SetAudioIcon()
         {
@@ -197,6 +187,22 @@ namespace FruitSort
             {
                 audioIcon.sprite = audioOff;
             }
+        }
+        private void ActiveWinPopUp(float playerTime)
+        {
+            int minutes = Mathf.FloorToInt(playerTime / 60);
+            int seconds = Mathf.FloorToInt(playerTime % 60);
+            YourTimeText_GameOver.text = string.Format("Your Time - {0:00}:{1:00}", minutes, seconds);
+            SetBestTime();
+
+            Invoke(nameof(ShowWinPopUP), 0.5f);
+        }
+
+        public void ShowWinPopUP()
+        {
+            AudioManager.instance.PlayWinSound();
+            GameOverPOpUp.SetActive(true);
+            PausePanel.SetActive(false);
         }
 
     }

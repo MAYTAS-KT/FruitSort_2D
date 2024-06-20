@@ -107,7 +107,6 @@ namespace FruitSort
 
             if (parentToReturnTo.transform.childCount == 0)
             {
-                AudioManager.instance.PlayWinSound();
                 GameManager.instance.AllFruitsSorted();
             }
         }
