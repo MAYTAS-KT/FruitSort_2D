@@ -10,13 +10,12 @@ namespace FruitSort
 {
     public class GameManager : MonoBehaviour
     {
-        [Header("Sorting Type")]
-        [SerializeField] SortingCriteria sortingCriteria;
-        [Header("CHECKS")]
-        [SerializeField] bool doColorCheck;
-        [SerializeField] bool doTypeCheck;
-        [SerializeField] bool doSizeCheck;
 
+        [Header("Checks")]
+        [SerializeField] bool randomizeSortingCriteria;
+        [Header("Sorting Type")]
+        public SortingCriteria sortingCriteria=SortingCriteria.Color;
+       
         [SerializeField] GameTimer gameTimer;
         [SerializeField] GameData gameData;
         [SerializeField] LayoutGroup animalLayoutGroup;
@@ -31,7 +30,6 @@ namespace FruitSort
         public static GameManager instance;
 
         private AudioManager audioManager;
-        private UIManager uiManager;
 
         private List<FruitData> shuffledFruits;
         private List<BasketData> shuffledBaskets;
@@ -58,7 +56,6 @@ namespace FruitSort
             }
             originalColor=visualImageRef.color;
 
-            sortingCriteria = (SortingCriteria)UnityEngine.Random.Range(0, Enum.GetValues(typeof(SortingCriteria)).Length);
 
             shuffledFruits = new List<FruitData>(gameData.Fruits);
             shuffledBaskets = new List<BasketData>(gameData.Baskets);
@@ -67,17 +64,22 @@ namespace FruitSort
 
         public void LoadGame()
         {
+            if (randomizeSortingCriteria)
+            {
+                sortingCriteria = (SortingCriteria)UnityEngine.Random.Range(0, Enum.GetValues(typeof(SortingCriteria)).Length);
+            }
+
             ShuffleList(shuffledFruits);
             ShuffleList(shuffledBaskets);
 
-            SpawnAnimals();
-            SpawnHabitats();
+            SpawnFruits();
+            SpawnBaskets();
 
 
             gameTimer.ResetAndStartTimer();
         }
 
-        public void SpawnAnimals()
+        public void SpawnFruits()
         {
             DragAndDrop temp;
 
@@ -99,12 +101,13 @@ namespace FruitSort
                 temp.fruitText.text = fruitData.fruitName;
                 temp.fruitType = fruitData.fruitType;
                 temp.fruitColor = fruitData.fruitColor;
+                temp.fruitSize = fruitData.fruitSize;
                 temp.fruitImage.sprite = fruitData.fruitSprite;
             }
             
         }
 
-        public void SpawnHabitats()
+        public void SpawnBaskets()
         {
             Basket temp;
 
@@ -130,18 +133,20 @@ namespace FruitSort
                 // Assign properties to the DragAndDrop component
                 temp.basketColor = basketData.colorBasketType;
                 temp.fruitBasketType= basketData.fruitBasketTypes;
+                temp.basketSize = basketData.basketSize;
                 temp.BasketImage.sprite = basketData.basketSprite;
 
                 switch (sortingCriteria)
                 {
                     case SortingCriteria.Size:
-                        temp.BasketName.text =basketData.basketSize + " " + basketData.basketName;
+                        temp.BasketName.text =basketData.basketSize.ToString();
                         break;
                     case SortingCriteria.Color:
-                        temp.BasketName.text =basketData.colorBasketType + " " + basketData.basketName;
+                        temp.BasketName.text =basketData.colorBasketType.ToString();
+                        temp.BasketImage.color = basketData.basketColor;
                         break;
                     case SortingCriteria.Type:
-                        temp.BasketName.text =basketData.fruitBasketTypes+" "+ basketData.basketName;
+                        temp.BasketName.text =basketData.fruitBasketTypes.ToString();
                         break;
                     default:
                         temp.BasketName.text = basketData.basketName;

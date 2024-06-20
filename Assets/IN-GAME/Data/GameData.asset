@@ -20,23 +20,27 @@ MonoBehaviour:
     fruitBasketTypes: 0
     basketSize: 0
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}
+    basketColor: {r: 1, g: 0, b: 0, a: 1}
   - basketName: Basket
     colorBasketType: 1
     fruitBasketTypes: 2
     basketSize: 1
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}
+    basketColor: {r: 0.9490196, g: 1, b: 0, a: 0.92156863}
   - basketName: Basket
     colorBasketType: 2
     fruitBasketTypes: 1
     basketSize: 2
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}
+    basketColor: {r: 0, g: 1, b: 0, a: 1}
   - basketName: Basket
     colorBasketType: 3
     fruitBasketTypes: 3
     basketSize: 3
     basketSprite: {fileID: 21300000, guid: 706c6f73e55b6e640955c75afc8625e3, type: 3}
+    basketColor: {r: 1, g: 1, b: 1, a: 1}
   Fruits:
-  - fruitName: Pomegranate
+  - fruitName: Pomo
     fruitSprite: {fileID: -2023524599, guid: 39eeec1d2b507bd40aecde6f4acaa323, type: 3}
     fruitColor: 0
     fruitType: 4
@@ -69,7 +73,7 @@ MonoBehaviour:
   - fruitName: Coconut
     fruitSprite: {fileID: -1054871231, guid: 39eeec1d2b507bd40aecde6f4acaa323, type: 3}
     fruitColor: 3
-    fruitType: 4
+    fruitType: 3
     fruitSize: 0
   - fruitName: Banana
     fruitSprite: {fileID: 101327340, guid: 39eeec1d2b507bd40aecde6f4acaa323, type: 3}

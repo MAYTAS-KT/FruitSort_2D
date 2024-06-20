@@ -13,7 +13,8 @@ namespace FruitSort
             public ColorBasketType colorBasketType;
             public FruitBasketType fruitBasketTypes;
             public Size basketSize;
-            public Sprite basketSprite; 
+            public Sprite basketSprite;
+            public Color basketColor;
         }
 
         [System.Serializable]

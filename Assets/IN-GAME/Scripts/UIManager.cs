@@ -36,6 +36,7 @@ namespace FruitSort
         [SerializeField] TextMeshProUGUI BestTimeText;
         [SerializeField] TextMeshProUGUI BestTimeText_GameOver;
         [SerializeField] TextMeshProUGUI YourTimeText_GameOver;
+        [SerializeField] TextMeshProUGUI sortingInstructionText;
 
         [Header("SCRIPT REF")]
         [SerializeField] GameTimer gameTimer;
@@ -50,6 +51,7 @@ namespace FruitSort
                 audioManager = AudioManager.instance;
                 SetAudioIcon();
             }
+
             gameTimer.onTimeStop.AddListener(ShowWinPopUP);
             SetBestTime();
 
@@ -68,6 +70,7 @@ namespace FruitSort
             restartBtn_GameOver.onClick.AddListener(RestartGame);
         }
 
+        
         public void ShowWinPopUP(float playerTime)
         {
             print("entered");
@@ -89,6 +92,7 @@ namespace FruitSort
             GamePanel.SetActive(true);
             mainMenu.SetActive(false);
             PausePanel.SetActive(false);
+            GiveInstructionText();
 
         }
 
@@ -120,6 +124,7 @@ namespace FruitSort
             mainMenu.SetActive(false);
             GamePanel.SetActive(true);
             GameManager.instance.LoadGame();
+            GiveInstructionText();
             audioManager.PlayClicKSound();
             audioManager.ChangeToGameMusic();
 
@@ -166,6 +171,18 @@ namespace FruitSort
             int seconds = Mathf.FloorToInt(time % 60);
             BestTimeText.text = string.Format("Best Time - {0:00}:{1:00}", minutes, seconds);
             BestTimeText_GameOver.text = string.Format("Best Time - {0:00}:{1:00}", minutes, seconds);
+        }
+
+        private void GiveInstructionText()
+        {
+            if (GameManager.instance != null)
+            {
+                sortingInstructionText.text = "sort by - " + GameManager.instance.sortingCriteria.ToString();
+            }
+            else
+            {
+                sortingInstructionText.text = "sort by - Color";
+            }
         }
 
     }
