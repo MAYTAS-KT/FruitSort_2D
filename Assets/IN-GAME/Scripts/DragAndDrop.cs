@@ -35,6 +35,8 @@ namespace FruitSort
             fruitImage.sprite = fruitData.fruitSprite;
         }
 
+        #region DragFuncitons
+
         public void OnBeginDrag(PointerEventData eventData)
         {
           
@@ -110,6 +112,8 @@ namespace FruitSort
                 GameManager.instance.AllFruitsSorted();
             }
         }
+
+        #endregion
 
         #region Dotween Functions
 

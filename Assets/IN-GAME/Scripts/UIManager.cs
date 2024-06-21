@@ -175,8 +175,6 @@ namespace FruitSort
 
         #endregion
 
-       
-
         private void SetAudioIcon()
         {
             if (audioManager.IsAudioEnabled())

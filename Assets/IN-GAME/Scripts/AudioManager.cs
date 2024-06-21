@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 namespace FruitSort
@@ -9,14 +7,13 @@ namespace FruitSort
         public static AudioManager instance;
 
         [Header("AUIDO CLIPS")]
-        public AudioClip mainMenuMusic;
-        public AudioClip gameMusic;
-        public AudioClip correctGuessClip;
-        public AudioClip wrongGuessClip;
-        public AudioClip timeUpClip;
-        public AudioClip winClip;
-        public AudioClip errorClip;
-        public AudioClip ClickClip;
+        [SerializeField] AudioClip mainMenuMusic;
+        [SerializeField] AudioClip gameMusic;
+        [SerializeField] AudioClip correctGuessClip;
+        [SerializeField] AudioClip wrongGuessClip;
+        [SerializeField] AudioClip winClip;
+        [SerializeField] AudioClip errorClip;
+        [SerializeField] AudioClip ClickClip;
 
         [Header("AUIDO SOURCE")]
         [SerializeField] AudioSource musicSource;
@@ -31,7 +28,6 @@ namespace FruitSort
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject); // Keep AudioManager across scenes
             }
             else
             {
@@ -60,20 +56,11 @@ namespace FruitSort
             PlayMainMenuMusic();
         }
 
-       
+        #region SFX Play
+
         public void PlayClicKSound()
         {
             PlaySoundEffect(ClickClip);
-        }
-
-       
-        private void PlayMusic(AudioClip clip)
-        {
-            if (musicSource.clip != clip)
-            {
-                musicSource.clip = clip;
-                musicSource.Play();
-            }
         }
 
         public void PlayCorrectGuessSound()
@@ -84,11 +71,6 @@ namespace FruitSort
         public void PlayWrongGuessSound()
         {
             PlaySoundEffect(wrongGuessClip);
-        }
-
-        public void PlayTimeUpSound()
-        {
-            PlaySoundEffect(timeUpClip);
         }
 
         public void PlayWinSound()
@@ -106,30 +88,7 @@ namespace FruitSort
             soundEffectSource.PlayOneShot(clip);
         }
 
-        public void PauseMusic()
-        {
-            musicSource.Pause();
-        }
-
-        public void ResumeMusic()
-        {
-            musicSource.UnPause();
-        }
-
-        public void StopMusic()
-        {
-            musicSource.Stop();
-        }
-
-        public bool IsMainMenuMusicPlaying()
-        {
-            return musicSource.clip == mainMenuMusic && musicSource.isPlaying;
-        }
-
-        public bool IsGameMusicPlaying()
-        {
-            return musicSource.clip == gameMusic && musicSource.isPlaying;
-        }
+#endregion
 
         #region BG MUSIC
         public void PlayMainMenuMusic()
